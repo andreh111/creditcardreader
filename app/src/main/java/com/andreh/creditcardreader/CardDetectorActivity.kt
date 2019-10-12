@@ -36,8 +36,6 @@ class CardDetectorActivity : AppCompatActivity() {
         txt_card = findViewById(R.id.textCardText) as TextView
         image_to_analyze = findViewById(R.id.image_to_analyze) as ImageView
 
-        showToast("file://" + intent.extras!!.getString("image_to_analyze"))
-
         val imageFile = File(""+intent.extras!!.getString("image_to_analyze"))
         if(imageFile.exists()){
             val bitmap = BitmapFactory.decodeFile(imageFile.toString())
@@ -52,41 +50,12 @@ class CardDetectorActivity : AppCompatActivity() {
     }
 
     private fun runTextRecognition() {
-        try {
 
-//         /emulated/storage/picturfile://es/pic1.jpg
-            val image = FirebaseVisionImage.fromFilePath(this@CardDetectorActivity, Uri.parse("file://" + intent.extras!!.getString("image_to_analyze")!!))
-            val detector = FirebaseVision.getInstance()
-                    .onDeviceTextRecognizer
-            btn_on_device!!.setEnabled(false)
-            detector.processImage(image)
-                    .addOnSuccessListener { texts ->
-                        btn_on_device!!.setEnabled(true)
-                        processTextRecognitionResult(texts)
-                    }
-                    .addOnFailureListener { e ->
-                        btn_on_device!!.setEnabled(true)
-                        e.printStackTrace()
-                    }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
 
     }
 
     private fun processTextRecognitionResult(texts: FirebaseVisionText) {
-        val blocks = texts.textBlocks
-        if (blocks.size == 0) {
-            showToast("No Text Found")
-        }
-        val recognizedText = StringBuilder("")
-        for (i in blocks.indices) {
-            val lines = blocks[i].lines
-            for (j in lines.indices) {
-                recognizedText.append(lines[j].text + "\n")
-            }
-        }
-        txt_card!!.setText(recognizedText)
+
     }
     private fun showToast(no_text_found: String) {
         Toast.makeText(this, no_text_found + "", Toast.LENGTH_SHORT).show()
